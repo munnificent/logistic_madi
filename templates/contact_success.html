@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Сообщение отправлено!{% endblock %}
+
+{% block content %}
+<h1>Спасибо, {{ name }}!</h1>
+<p>Ваше сообщение успешно отправлено. Мы свяжемся с вами в ближайшее время.</p>
+<p>
+  Если у вас остались вопросы, вы всегда можете позвонить по номеру
+  <strong>+7 (###) ###-##-##</strong>
+  или написать на электронную почту 
+  <strong>info@logistickz.kz</strong>.
+</p>
+<a class="btn btn-success" href="{{ url_for('index') }}">Вернуться на главную</a>
+{% endblock %}

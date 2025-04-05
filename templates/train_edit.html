@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}
+{% if train %}
+  Редактировать поезд #{{ train.train_id }}
+{% else %}
+  Добавить новый поезд
+{% endif %}
+ - Админ
+{% endblock %}
+
+{% block content %}
+{% if train %}
+  <h2>Редактировать поезд ID {{ train.train_id }}</h2>
+{% else %}
+  <h2>Добавить новый поезд</h2>
+{% endif %}
+
+<form method="POST" novalidate>
+  {{ form.csrf_token }}
+  
+  <div class="mb-3">
+    <label for="name" class="form-label">Название (№ поезда)</label>
+    {{ form.name(class="form-control", id="name", placeholder="Например: KZ-001") }}
+    {% if form.name.errors %}
+      <div class="text-danger">
+        {% for err in form.name.errors %}{{ err }}<br>{% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="mb-3">
+    <label for="departure_station" class="form-label">Начальная станция</label>
+    {{ form.departure_station(class="form-control", id="departure_station", placeholder="Алматы") }}
+    {% if form.departure_station.errors %}
+      <div class="text-danger">
+        {% for err in form.departure_station.errors %}{{ err }}<br>{% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="mb-3">
+    <label for="arrival_station" class="form-label">Конечная станция</label>
+    {{ form.arrival_station(class="form-control", id="arrival_station", placeholder="Астана (Нур-Султан)") }}
+    {% if form.arrival_station.errors %}
+      <div class="text-danger">
+        {% for err in form.arrival_station.errors %}{{ err }}<br>{% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="mb-3">
+    <label for="departure_time" class="form-label">Время отправления</label>
+    {{ form.departure_time(class="form-control", id="departure_time", placeholder="2025-04-10 08:00") }}
+    {% if form.departure_time.errors %}
+      <div class="text-danger">
+        {% for err in form.departure_time.errors %}{{ err }}<br>{% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="mb-3">
+    <label for="arrival_time" class="form-label">Время прибытия</label>
+    {{ form.arrival_time(class="form-control", id="arrival_time", placeholder="2025-04-11 20:00") }}
+    {% if form.arrival_time.errors %}
+      <div class="text-danger">
+        {% for err in form.arrival_time.errors %}{{ err }}<br>{% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="mb-3">
+    <label for="last_operation_station" class="form-label">Станция последней операции</label>
+    {{ form.last_operation_station(class="form-control", id="last_operation_station", placeholder="Кокшетау") }}
+    {% if form.last_operation_station.errors %}
+      <div class="text-danger">
+        {% for err in form.last_operation_station.errors %}{{ err }}<br>{% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="mb-3">
+    <label for="last_operation_time" class="form-label">Время последней операции</label>
+    {{ form.last_operation_time(class="form-control", id="last_operation_time", placeholder="2025-04-10 15:00") }}
+    {% if form.last_operation_time.errors %}
+      <div class="text-danger">
+        {% for err in form.last_operation_time.errors %}{{ err }}<br>{% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="mb-3">
+    <label for="distance_to_arrival" class="form-label">Расстояние до конечной (км)</label>
+    {{ form.distance_to_arrival(class="form-control", id="distance_to_arrival") }}
+    {% if form.distance_to_arrival.errors %}
+      <div class="text-danger">
+        {% for err in form.distance_to_arrival.errors %}{{ err }}<br>{% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="mb-3">
+    <label for="operation_desc" class="form-label">Описание операции</label>
+    {{ form.operation_desc(class="form-control", id="operation_desc", placeholder="Отправление / Прибытие / Расформирование...") }}
+    {% if form.operation_desc.errors %}
+      <div class="text-danger">
+        {% for err in form.operation_desc.errors %}{{ err }}<br>{% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <button type="submit" class="btn btn-success">Сохранить</button>
+  <a class="btn btn-secondary" href="{{ url_for('train_list') }}">Отмена</a>
+</form>
+{% endblock %}

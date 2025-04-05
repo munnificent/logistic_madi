@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Отслеживание груза</h2>
+
+<form method="POST" action="{{ url_for('track') }}">
+    <div>
+        <label>Тип поиска:</label><br>
+        <select name="search_type">
+            <option value="cargo">Груз (cargo_id)</option>
+            <option value="train">Поезд (train_id)</option>
+        </select>
+    </div>
+    <br>
+    <div>
+        <label>ID (номер):</label><br>
+        <input type="text" name="identifier" placeholder="Например: 1234">
+    </div>
+    <br>
+    <button type="submit">Найти</button>
+</form>
+
+{% endblock %}

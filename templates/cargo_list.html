@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Список грузов - Админ{% endblock %}
+
+{% block content %}
+<h2>Список грузов</h2>
+<a class="btn btn-primary mb-3" href="{{ url_for('cargo_add') }}">
+  <i class="bi bi-plus"></i> Добавить новый груз
+</a>
+
+<table class="table table-bordered table-striped align-middle">
+  <thead class="table-light">
+    <tr>
+      <th>ID</th>
+      <th>Тип груза</th>
+      <th>Поезд (ID)</th>
+      <th>Текущая станция</th>
+      <th>Статус</th>
+      <th>Следующая станция</th>
+      <th>Последняя операция</th>
+      <th>Расстояние (км)</th>
+      <th width="190px">Действия</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for c in cargos %}
+    <tr>
+      <td>{{ c.cargo_id }}</td>
+      <td>{{ c.cargo_type }}</td>
+      <td>
+        {% if c.train %}
+          {{ c.train.name }} (#{{ c.train_id }})
+        {% else %}
+          (Не привязан к поезду)
+        {% endif %}
+      </td>
+      <td>{{ c.current_station or "-" }}</td>
+      <td>{{ c.status or "-" }}</td>
+      <td>{{ c.next_station or "-" }}</td>
+      <td>{{ c.last_operation or "-" }}</td>
+      <td>{{ c.distance_to_arrival or "-" }}</td>
+      <td>
+        <!-- Кнопка "Редактировать" -->
+        <a class="btn btn-sm btn-warning"
+           href="{{ url_for('cargo_edit', cargo_id=c.cargo_id) }}">
+          Редактировать
+        </a>
+        <!-- Кнопка "Удалить" -->
+        <form action="{{ url_for('cargo_delete', cargo_id=c.cargo_id) }}" method="POST"
+              style="display:inline-block"
+              onsubmit="return confirm('Удалить груз #{{ c.cargo_id }}?');">
+          <button class="btn btn-sm btn-danger" type="submit">Удалить</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

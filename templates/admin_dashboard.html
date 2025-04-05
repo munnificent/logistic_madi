@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Админ-панель{% endblock %}
+
+{% block content %}
+<h1>Администраторская панель</h1>
+<p>Добро пожаловать, {{ session['username'] }}!</p>
+
+<div class="row">
+  <div class="col-md-4">
+    <div class="card mb-3">
+      <div class="card-body text-center">
+        <h5 class="card-title">Управление поездами</h5>
+        <p class="card-text">Создание, просмотр, редактирование и удаление информации о поездах.</p>
+        <a href="{{ url_for('train_list') }}" class="btn btn-primary">Список поездов</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card mb-3">
+      <div class="card-body text-center">
+        <h5 class="card-title">Управление грузами</h5>
+        <p class="card-text">Создание, просмотр, редактирование и удаление информации о грузах.</p>
+        <a href="{{ url_for('cargo_list') }}" class="btn btn-primary">Список грузов</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Если нужно управление пользователями -->
+  <div class="col-md-4">
+    <div class="card mb-3">
+      <div class="card-body text-center">
+        <h5 class="card-title">Управление пользователями</h5>
+        <p class="card-text">Добавление новых пользователей, изменение ролей, удаление и т.д.</p>
+        <!-- Предположим, что такой роут появится позже -->
+        <a href="#" class="btn btn-secondary disabled">В разработке</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+<p>
+  Здесь могут быть быстрые ссылки на <strong>статистику</strong>, <strong>отчёты</strong>, 
+  или настройку <strong>системных параметров</strong>.
+</p>
+
+{% endblock %}

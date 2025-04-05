@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Контакты - Логистика KZ{% endblock %}
+
+{% block content %}
+<h1>Свяжитесь с нами</h1>
+<p>Если у вас есть вопросы или предложения, заполните форму ниже:</p>
+
+<form method="POST" novalidate>
+    <!-- Защита CSRF (Flask-WTF) -->
+    {{ form.csrf_token }}
+    
+    <div class="mb-3">
+        <label for="name" class="form-label">Имя</label>
+        {{ form.name(class="form-control", id="name", placeholder="Ваше имя") }}
+        {% if form.name.errors %}
+            <div class="text-danger">
+                {% for err in form.name.errors %}
+                    {{ err }}<br>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="mb-3">
+        <label for="email" class="form-label">E-mail</label>
+        {{ form.email(class="form-control", id="email", placeholder="you@example.com") }}
+        {% if form.email.errors %}
+            <div class="text-danger">
+                {% for err in form.email.errors %}
+                    {{ err }}<br>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="mb-3">
+        <label for="message" class="form-label">Сообщение</label>
+        {{ form.message(class="form-control", id="message", rows="5", placeholder="Ваше сообщение") }}
+        {% if form.message.errors %}
+            <div class="text-danger">
+                {% for err in form.message.errors %}
+                    {{ err }}<br>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    
+    <button type="submit" class="btn btn-primary">
+        {{ form.submit.label.text }}
+    </button>
+</form>
+
+<hr>
+<p>Также вы можете позвонить нам по номеру <strong>+7 (###) ###-##-##</strong> или написать на <strong>info@logistickz.kz</strong>.</p>
+{% endblock %}
