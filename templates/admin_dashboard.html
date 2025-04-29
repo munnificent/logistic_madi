@@ -2,47 +2,64 @@
 {% block title %}Админ-панель{% endblock %}
 
 {% block content %}
-<h1>Администраторская панель</h1>
-<p>Добро пожаловать, {{ session['username'] }}!</p>
+<h1 class="mb-4">Панель администрирования</h1>
+<p class="lead mb-4">Добро пожаловать, <strong class="text-primary">{{ session['username'] }}</strong>!</p>
 
 <div class="row">
-  <div class="col-md-4">
-    <div class="card mb-3">
-      <div class="card-body text-center">
-        <h5 class="card-title">Управление поездами</h5>
-        <p class="card-text">Создание, просмотр, редактирование и удаление информации о поездах.</p>
-        <a href="{{ url_for('train_list') }}" class="btn btn-primary">Список поездов</a>
-      </div>
+    {# Применяем класс feature-card для консистентности с темной темой #}
+    <div class="col-lg-4 col-md-6 mb-4"> {# Изменено на col-lg-4 col-md-6 для лучшей адаптивности #}
+        <div class="feature-card text-center h-100"> {# Добавлен text-center и h-100 #}
+            <div class="feature-icon mb-3">
+                <i class="fas fa-train fa-3x"></i> {# Иконка поезда #}
+            </div>
+            <h4 class="feature-title">Управление поездами</h4> {# Заменено h5 на h4 #}
+            <p class="feature-text">
+                Создание, просмотр, редактирование и удаление информации о поездах.
+            </p>
+            <a href="{{ url_for('train_list') }}" class="btn btn-primary mt-auto">Перейти к поездам</a> {# mt-auto прижмет кнопку вниз #}
+        </div>
     </div>
-  </div>
 
-  <div class="col-md-4">
-    <div class="card mb-3">
-      <div class="card-body text-center">
-        <h5 class="card-title">Управление грузами</h5>
-        <p class="card-text">Создание, просмотр, редактирование и удаление информации о грузах.</p>
-        <a href="{{ url_for('cargo_list') }}" class="btn btn-primary">Список грузов</a>
-      </div>
+    <div class="col-lg-4 col-md-6 mb-4">
+        <div class="feature-card text-center h-100">
+             <div class="feature-icon mb-3">
+                <i class="fas fa-box-open fa-3x"></i> {# Иконка груза #}
+            </div>
+            <h4 class="feature-title">Управление грузами</h4>
+            <p class="feature-text">
+                Создание, просмотр, редактирование и удаление информации о грузах.
+            </p>
+            <a href="{{ url_for('cargo_list') }}" class="btn btn-primary mt-auto">Перейти к грузам</a>
+        </div>
     </div>
-  </div>
 
-  <!-- Если нужно управление пользователями -->
-  <div class="col-md-4">
-    <div class="card mb-3">
-      <div class="card-body text-center">
-        <h5 class="card-title">Управление пользователями</h5>
-        <p class="card-text">Добавление новых пользователей, изменение ролей, удаление и т.д.</p>
-        <!-- Предположим, что такой роут появится позже -->
-        <a href="#" class="btn btn-secondary disabled">В разработке</a>
-      </div>
+    <div class="col-lg-4 col-md-6 mb-4">
+        <div class="feature-card text-center h-100 disabled-card"> {# Добавлен класс для возможной стилизации неактивной карты #}
+            <div class="feature-icon mb-3 text-muted"> {# Иконка приглушена #}
+                <i class="fas fa-users-cog fa-3x"></i> {# Иконка пользователей #}
+            </div>
+            <h4 class="feature-title">Управление пользователями</h4>
+            <p class="feature-text">
+                Добавление, роли, блокировка. (Функционал в разработке).
+            </p>
+            <a href="#" class="btn btn-secondary disabled mt-auto">Недоступно</a> {# Кнопка неактивна #}
+        </div>
     </div>
-  </div>
 </div>
 
-<hr>
-<p>
-  Здесь могут быть быстрые ссылки на <strong>статистику</strong>, <strong>отчёты</strong>, 
-  или настройку <strong>системных параметров</strong>.
-</p>
+<hr class="feature-divider my-5"> {# Разделитель #}
+
+<div class="row">
+    <div class="col-12">
+        <h2>Дополнительные возможности</h2>
+        <p>
+            В будущем здесь могут быть размещены ссылки на раздел <strong>статистики</strong>,
+            генерацию <strong>отчётов</strong> или доступ к <strong>системным настройкам</strong>.
+        </p>
+        {# Примеры ссылок (пока неактивные) #}
+        <a href="#" class="btn btn-outline-secondary me-2 disabled">Статистика</a>
+        <a href="#" class="btn btn-outline-secondary disabled">Отчеты</a>
+    </div>
+</div>
 
 {% endblock %}

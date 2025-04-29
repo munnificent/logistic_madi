@@ -1,108 +1,132 @@
 {% extends "base.html" %}
 {% block title %}
 {% if cargo %}
-  Редактировать груз #{{ cargo.cargo_id }}
+  Редактирование груза #{{ cargo.cargo_id }}
 {% else %}
-  Добавить новый груз
+  Добавление нового груза
 {% endif %}
  - Админ
 {% endblock %}
 
 {% block content %}
-{% if cargo %}
-  <h2>Редактировать груз ID {{ cargo.cargo_id }}</h2>
-{% else %}
-  <h2>Добавить новый груз</h2>
-{% endif %}
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8"> {# Ограничиваем ширину формы #}
 
-<form method="POST" novalidate>
-  {{ form.csrf_token }}
+        {% if cargo %}
+          <h2 class="mb-4">Редактировать груз ID {{ cargo.cargo_id }}</h2>
+        {% else %}
+          <h2 class="mb-4">Добавить новый груз</h2>
+        {% endif %}
 
-  <div class="mb-3">
-    <label for="cargo_type" class="form-label">Тип груза</label>
-    {{ form.cargo_type(class="form-control", id="cargo_type", placeholder="Нефтепродукты / Сборные товары ...") }}
-    {% if form.cargo_type.errors %}
-      <div class="text-danger">
-        {% for err in form.cargo_type.errors %}{{ err }}<br>{% endfor %}
-      </div>
-    {% endif %}
-  </div>
+        {# --- Форма --- #}
+        <form method="POST" novalidate class="needs-validation p-4 rounded bg-light shadow-sm">
+          {{ form.csrf_token }} {# Защита от CSRF #}
 
-  <div class="mb-3">
-    <label for="train_id" class="form-label">ID поезда</label>
-    {{ form.train_id(class="form-control", id="train_id", placeholder="1, 2, 3...") }}
-    <small class="text-muted">
-      Укажите идентификатор поезда, с которым связан груз. 
-      Можно оставить пустым, если груз ещё не привязан.
-    </small>
-    {% if form.train_id.errors %}
-      <div class="text-danger">
-        {% for err in form.train_id.errors %}{{ err }}<br>{% endfor %}
-      </div>
-    {% endif %}
-  </div>
+          {# --- Основные поля Груза --- #}
+          <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="cargo_type" class="form-label">{{ form.cargo_type.label }}</label>
+                {{ form.cargo_type(class="form-control" + (" is-invalid" if form.cargo_type.errors else ""), id="cargo_type", placeholder="Нефтепродукты / Зерно...") }}
+                {% if form.cargo_type.errors %}
+                  <div class="invalid-feedback">
+                    {% for err in form.cargo_type.errors %}{{ err }}{% endfor %}
+                  </div>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                 <label for="train_id" class="form-label">{{ form.train_id.label }}</label>
+                 {# Предполагаем, что train_id это SelectField в forms.py #}
+                 {{ form.train_id(class="form-select" + (" is-invalid" if form.train_id.errors else ""), id="train_id") }}
+                 <small class="form-text text-muted">
+                   Выберите поезд из списка или оставьте пустым, если груз еще не назначен.
+                 </small>
+                 {% if form.train_id.errors %}
+                   <div class="invalid-feedback">
+                     {% for err in form.train_id.errors %}{{ err }}{% endfor %}
+                   </div>
+                 {% endif %}
+            </div>
+          </div>
 
-  <div class="mb-3">
-    <label for="current_station" class="form-label">Текущая станция</label>
-    {{ form.current_station(class="form-control", id="current_station", placeholder="Кокшетау") }}
-    {% if form.current_station.errors %}
-      <div class="text-danger">
-        {% for err in form.current_station.errors %}{{ err }}<br>{% endfor %}
-      </div>
-    {% endif %}
-  </div>
+          <div class="row mb-3">
+              <div class="col-md-6">
+                 <label for="status" class="form-label">{{ form.status.label }}</label>
+                 {{ form.status(class="form-control" + (" is-invalid" if form.status.errors else ""), id="status", placeholder="В пути / На складе / Доставлен") }}
+                 {% if form.status.errors %}
+                   <div class="invalid-feedback">
+                     {% for err in form.status.errors %}{{ err }}{% endfor %}
+                   </div>
+                 {% endif %}
+              </div>
+               <div class="col-md-6">
+                 <label for="current_station" class="form-label">{{ form.current_station.label }}</label>
+                 {{ form.current_station(class="form-control" + (" is-invalid" if form.current_station.errors else ""), id="current_station", placeholder="Алматы / Астана") }}
+                 {% if form.current_station.errors %}
+                   <div class="invalid-feedback">
+                     {% for err in form.current_station.errors %}{{ err }}{% endfor %}
+                   </div>
+                 {% endif %}
+              </div>
+          </div>
 
-  <div class="mb-3">
-    <label for="status" class="form-label">Статус</label>
-    {{ form.status(class="form-control", id="status", placeholder="В пути / Ожидание / Прибыл") }}
-    {% if form.status.errors %}
-      <div class="text-danger">
-        {% for err in form.status.errors %}{{ err }}<br>{% endfor %}
-      </div>
-    {% endif %}
-  </div>
+           <div class="row mb-3">
+               <div class="col-md-6">
+                 <label for="next_station" class="form-label">{{ form.next_station.label }}</label>
+                 {{ form.next_station(class="form-control" + (" is-invalid" if form.next_station.errors else ""), id="next_station", placeholder="Астана / Караганда") }}
+                 {% if form.next_station.errors %}
+                   <div class="invalid-feedback">
+                     {% for err in form.next_station.errors %}{{ err }}{% endfor %}
+                   </div>
+                 {% endif %}
+               </div>
+                <div class="col-md-6">
+                    <label for="distance_to_arrival" class="form-label">{{ form.distance_to_arrival.label }}</label>
+                    {{ form.distance_to_arrival(class="form-control" + (" is-invalid" if form.distance_to_arrival.errors else ""), id="distance_to_arrival", type="number", step="1", min="0") }}
+                    <small class="form-text text-muted">Расстояние в километрах.</small>
+                     {% if form.distance_to_arrival.errors %}
+                       <div class="invalid-feedback">
+                         {% for err in form.distance_to_arrival.errors %}{{ err }}{% endfor %}
+                       </div>
+                     {% endif %}
+                </div>
+           </div>
 
-  <div class="mb-3">
-    <label for="last_stop_time" class="form-label">Время последней остановки</label>
-    {{ form.last_stop_time(class="form-control", id="last_stop_time", placeholder="2025-04-10 14:30") }}
-    {% if form.last_stop_time.errors %}
-      <div class="text-danger">
-        {% for err in form.last_stop_time.errors %}{{ err }}<br>{% endfor %}
-      </div>
-    {% endif %}
-  </div>
 
-  <div class="mb-3">
-    <label for="next_station" class="form-label">Следующая станция</label>
-    {{ form.next_station(class="form-control", id="next_station", placeholder="Астана") }}
-    {% if form.next_station.errors %}
-      <div class="text-danger">
-        {% for err in form.next_station.errors %}{{ err }}<br>{% endfor %}
-      </div>
-    {% endif %}
-  </div>
+          {# --- Поля Операций --- #}
+           <div class="row mb-3">
+               <div class="col-md-6">
+                   <label for="last_operation" class="form-label">{{ form.last_operation.label }}</label>
+                   {{ form.last_operation(class="form-control" + (" is-invalid" if form.last_operation.errors else ""), id="last_operation", placeholder="Погрузка / Отправление со станции...") }}
+                   {% if form.last_operation.errors %}
+                     <div class="invalid-feedback">
+                       {% for err in form.last_operation.errors %}{{ err }}{% endfor %}
+                     </div>
+                   {% endif %}
+               </div>
+                <div class="col-md-6">
+                  <label for="last_stop_time" class="form-label">{{ form.last_stop_time.label }}</label>
+                  {# Если используете DateTimeField, тип может быть другим #}
+                  {{ form.last_stop_time(class="form-control" + (" is-invalid" if form.last_stop_time.errors else ""), id="last_stop_time", placeholder="ГГГГ-ММ-ДД ЧЧ:ММ", type="text") }}
+                   {% if form.last_stop_time.errors %}
+                     <div class="invalid-feedback">
+                       {% for err in form.last_stop_time.errors %}{{ err }}{% endfor %}
+                     </div>
+                   {% endif %}
+               </div>
+           </div>
 
-  <div class="mb-3">
-    <label for="distance_to_arrival" class="form-label">Расстояние до конечной (км)</label>
-    {{ form.distance_to_arrival(class="form-control", id="distance_to_arrival") }}
-    {% if form.distance_to_arrival.errors %}
-      <div class="text-danger">
-        {% for err in form.distance_to_arrival.errors %}{{ err }}<br>{% endfor %}
-      </div>
-    {% endif %}
-  </div>
+          {# --- Кнопки --- #}
+          <hr class="my-4">
+          <div class="d-flex justify-content-end"> {# Выравниваем кнопки справа #}
+              <a class="btn btn-secondary me-2" href="{{ url_for('cargo_list') }}">
+                  <i class="fas fa-times me-1"></i>Отмена
+              </a>
+              <button type="submit" class="btn btn-success btn-glow">
+                  <i class="fas fa-save me-1"></i>Сохранить
+              </button>
+          </div>
 
-  <div class="mb-3">
-    <label for="last_operation" class="form-label">Последняя операция</label>
-    {{ form.last_operation(class="form-control", id="last_operation", placeholder="Погрузка / Расформирование ...") }}
-    {% if form.last_operation.errors %}
-      <div class="text-danger">
-        {% for err in form.last_operation.errors %}{{ err }}<br>{% endfor %}
-      </div>
-    {% endif %}
-  </div>
-
-  <button type="submit" class="btn btn-success">Сохранить</button>
-  <a class="btn btn-secondary" href="{{ url_for('cargo_list') }}">Отмена</a>
-</form>
+        </form>
+    </div> {# Конец col-md-10 #}
+</div> {# Конец row #}
 {% endblock %}

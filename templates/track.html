@@ -1,22 +1,84 @@
 {% extends "base.html" %}
+
+{% block title %}Отслеживание грузов и поездов{% endblock %}
+
 {% block content %}
-<h2>Отслеживание груза</h2>
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6"> {# Ограничиваем ширину формы #}
+        <h2 class="text-center mb-4">Отслеживание</h2>
 
-<form method="POST" action="{{ url_for('track') }}">
-    <div>
-        <label>Тип поиска:</label><br>
-        <select name="search_type">
-            <option value="cargo">Груз (cargo_id)</option>
-            <option value="train">Поезд (train_id)</option>
-        </select>
-    </div>
-    <br>
-    <div>
-        <label>ID (номер):</label><br>
-        <input type="text" name="identifier" placeholder="Например: 1234">
-    </div>
-    <br>
-    <button type="submit">Найти</button>
-</form>
+        {# ----- Форма поиска ----- #}
+        {# Используем стили Bootstrap для формы #}
+        <form method="POST" action="{{ url_for('track') }}" class="mb-5 p-4 rounded bg-light shadow-sm">
+             {# CSRF токен нужен, если бы это была WTForm. Для простой формы его нет. #}
+             {# {{ form.hidden_tag() }} #}
 
+             <div class="mb-3">
+                <label for="search_type_select" class="form-label">Тип поиска:</label>
+                <select name="search_type" id="search_type_select" class="form-select">
+                    {# Сохраняем выбранное значение после отправки #}
+                    <option value="cargo" {% if search_type == 'cargo' %}selected{% endif %}>Груз (по ID груза)</option>
+                    <option value="train" {% if search_type == 'train' %}selected{% endif %}>Поезд (по ID поезда)</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="identifier_input" class="form-label">ID (номер):</label>
+                {# Сохраняем введенное значение после отправки #}
+                <input type="text" name="identifier" id="identifier_input" class="form-control" placeholder="Например: 1" value="{{ identifier if identifier else '' }}">
+            </div>
+
+            <div class="d-grid"> {# Растягиваем кнопку #}
+                <button type="submit" class="btn btn-primary btn-glow">Найти</button>
+            </div>
+        </form>
+
+        {# ----- Блок отображения результатов ----- #}
+        {% if result %} {# Проверяем, есть ли результат #}
+            <hr>
+            <h3 class="text-center mb-4">Результат поиска</h3>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    {# --- Если найден Груз --- #}
+                    {% if search_type == 'cargo' %}
+                        <h4 class="card-title">Детали груза #{{ result.cargo_id }}</h4>
+                        <p><strong>Тип груза:</strong> {{ result.cargo_type | default('Не указан') }}</p>
+                        <p><strong>Статус:</strong> {{ result.status | default('Не указан') }}</p>
+                        <p><strong>Текущая станция:</strong> {{ result.current_station | default('Не указана') }}</p>
+                        <p><strong>Следующая станция:</strong> {{ result.next_station | default('Не указана') }}</p>
+                        <p><strong>Расстояние до прибытия (км):</strong> {{ result.distance_to_arrival | default('Не указано') }}</p>
+                        <p><strong>Последняя операция:</strong> {{ result.last_operation | default('Нет данных') }}</p>
+                        <p><strong>Время последней остановки/операции:</strong> {{ result.last_stop_time | default('Нет данных') }}</p>
+                        {# Аккуратно обращаемся к поезду, он может быть None #}
+                        <p><strong>Привязан к поезду:</strong>
+                           {% if result.train %}
+                             <a href="{{ url_for('track', search_type='train', identifier=result.train_id) }}">{{ result.train.name | default('Без имени') }} (ID: {{ result.train_id }})</a>
+                           {% else %}
+                             Не привязан или ID поезда не указан
+                           {% endif %}
+                        </p>
+
+                    {# --- Если найден Поезд --- #}
+                    {% elif search_type == 'train' %}
+                        <h4 class="card-title">Детали поезда #{{ result.train_id }}</h4>
+                        <p><strong>Название/Номер:</strong> {{ result.name | default('Без имени') }}</p>
+                        <p><strong>Станция отправления:</strong> {{ result.departure_station | default('Не указана') }}</p>
+                        <p><strong>Станция назначения:</strong> {{ result.arrival_station | default('Не указана') }}</p>
+                        <p><strong>Время отправления:</strong> {{ result.departure_time | default('Нет данных') }}</p>
+                        <p><strong>Предполагаемое время прибытия:</strong> {{ result.arrival_time | default('Нет данных') }}</p>
+                        <p><strong>Станция последней операции:</strong> {{ result.last_operation_station | default('Нет данных') }}</p>
+                        <p><strong>Время последней операции:</strong> {{ result.last_operation_time | default('Нет данных') }}</p>
+                        <p><strong>Описание последней операции:</strong> {{ result.operation_desc | default('Нет данных') }}</p>
+                         <p><strong>Расстояние до прибытия (км):</strong> {{ result.distance_to_arrival | default('Не указано') }}</p>
+
+                        {# Можно добавить вывод списка грузов этого поезда, если нужно #}
+                        {# <p><strong>Грузы на поезде:</strong> ... </p> #}
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+        {# Сообщения об ошибках ("Не найдено" и т.д.) должны отображаться в блоке flash-сообщений в base.html #}
+
+    </div> {# Конец col-md-8 #}
+</div> {# Конец row #}
 {% endblock %}

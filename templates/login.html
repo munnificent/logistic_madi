@@ -1,33 +1,62 @@
 {% extends "base.html" %}
+
+{% block title %}Вход в систему{% endblock %}
+
 {% block content %}
-<h2>Авторизация</h2>
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    {% for category, msg in messages %}
-      <div class="alert alert-{{category}}">{{ msg }}</div>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5 col-xl-4"> {# Управляем шириной формы на разных экранах #}
 
-<form method="POST" novalidate>
-    {{ form.csrf_token }}
+        <div class="login-box p-4 p-md-5 rounded bg-light shadow-lg"> {# Добавлен класс login-box и стили Bootstrap #}
+            <h2 class="text-center mb-4">Авторизация</h2>
 
-    <div class="mb-3">
-        {{ form.username.label }}<br>
-        {{ form.username(class="form-control", id="username") }}
-        {% for error in form.username.errors %}
-            <p class="text-danger">{{ error }}</p>
-        {% endfor %}
-    </div>
-    
-    <div class="mb-3">
-        {{ form.password.label }}<br>
-        {{ form.password(class="form-control", id="password") }}
-        {% for error in form.password.errors %}
-            <p class="text-danger">{{ error }}</p>
-        {% endfor %}
-    </div>
-    
-    {{ form.submit(class="btn btn-primary") }}
-</form>
+            {# Блок с flash-сообщениями ЗДЕСЬ НЕ НУЖЕН, он есть в base.html #}
+            {# {% with messages = get_flashed_messages(with_categories=true) %} ... {% endwith %} #}
+
+            <form method="POST" novalidate class="needs-validation">
+                {{ form.csrf_token }}
+
+                <div class="mb-3">
+                    {{ form.username.label(class="form-label") }} {# Используем генерацию label #}
+                    {{ form.username(class="form-control" + (" is-invalid" if form.username.errors else ""), id="username", placeholder="Введите имя пользователя", required=true, autocomplete="username") }}
+                    {% if form.username.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.username.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4"> {# Увеличен нижний отступ перед кнопкой #}
+                    {{ form.password.label(class="form-label") }}
+                    {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else ""), id="password", placeholder="Введите пароль", required=true, autocomplete="current-password") }}
+                     {% if form.password.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                     {# Сюда можно добавить ссылку "Забыли пароль?", если она будет #}
+                     {# <div class="text-end mt-1"><a href="#" class="small text-muted">Забыли пароль?</a></div> #}
+                </div>
+
+                <div class="d-grid"> {# Растягиваем кнопку #}
+                   {{ form.submit(class="btn btn-primary btn-lg btn-glow") }}
+                </div>
+                 {# Сюда можно добавить ссылку "Регистрация", если она будет #}
+                 {# <p class="text-center small mt-3 text-muted">Нет аккаунта? <a href="#">Зарегистрироваться</a></p> #}
+            </form>
+        </div>
+
+    </div> {# Конец col #}
+</div> {# Конец row #}
+{% endblock %}
+
+{% block stylesheets %}
+{# Можно добавить специфичные стили для login-box, если нужно #}
+<style>
+  .login-box {
+    /* Можно добавить градиент или текстуру фона для login-box,
+       если стандартный bg-light не подходит к темной теме */
+    /* background-color: var(--bg-card); */ /* Пример использования переменной из style.css */
+     margin-top: 3rem; /* Добавим отступ сверху */
+  }
+</style>
 {% endblock %}

@@ -1,38 +1,412 @@
 /* style.css */
 
-/* Общие стили */
-body {
-    font-family: "Open Sans", Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-/* Пример, как можно менять цвет navbar */
-.navbar {
-    border-bottom: 1px solid #ccc;
-}
-
-/* Пример, как можно менять стили кнопок (класс .btn) */
-.btn {
-    text-transform: uppercase;
-}
-
-/* Пример стилизации заголовков */
-h1, h2, h3 {
+/* 1. Переменные для цветов (CSS Variables) */
+:root {
+    --primary-color: #00a1ff; /* Основной синий/голубой акцент */
+    --primary-hover: #007fcc;
+    --bg-dark: #121828;       /* Темный фон */
+    --bg-card: #1a2133;       /* Фон карточек/элементов */
+    --text-light: #f0f0f0;    /* Светлый текст */
+    --text-muted: #bdbdbd;    /* Приглушенный текст (СДЕЛАН СВЕТЛЕЕ) */
+    --border-color: #343a4f;   /* Цвет границ */
+    --glow-color: rgba(0, 161, 255, 0.7); /* Цвет свечения для кнопок */
+  }
+  
+  /* 2. Общие стили */
+  body {
+      font-family: 'Poppins', sans-serif; /* Убедитесь, что шрифт подключен в base.html */
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      line-height: 1.7;
+      margin: 0;
+      padding: 0;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+      font-weight: 600;
+      color: var(--text-light);
+  }
+  
+  a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  a:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+  }
+  
+  /* Ссылка в стиле основного текста (для темной темы) */
+  a.link-light {
+      color: var(--text-light);
+      text-decoration: none;
+  }
+  a.link-light:hover {
+      color: var(--primary-color);
+      text-decoration: underline;
+  }
+  a.link-primary {
+      color: var(--primary-color);
+      text-decoration: none;
+  }
+  a.link-primary:hover {
+      color: var(--primary-hover);
+  }
+  
+  
+  hr.feature-divider {
+      border-top: 1px solid var(--border-color);
+      margin: 3rem 0;
+  }
+  
+  /* 3. Навигация */
+  .navbar {
+      background-color: var(--bg-card) !important; /* Переопределяем bg-light */
+      border-bottom: 1px solid var(--border-color);
+  }
+  .navbar .navbar-brand {
+      color: var(--text-light) !important;
+      font-weight: 700;
+      font-size: 1.5rem;
+  }
+  .navbar .nav-link {
+      color: var(--text-muted) !important; /* Используем обновленный --text-muted */
+      margin-left: 10px;
+      margin-right: 10px;
+      transition: color 0.3s ease;
+  }
+  .navbar .nav-link:hover,
+  .navbar .nav-link.active { /* Bootstrap 5 использует .active для текущей страницы */
+      color: var(--primary-color) !important;
+  }
+  .navbar-toggler {
+      border-color: rgba(255, 255, 255, 0.1);
+  }
+  .navbar-toggler-icon {
+       background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(240, 240, 240, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  }
+  
+  /* 4. Секция Hero */
+  .hero-section {
+      /* Убедитесь, что ../images/network_background.jpg существует */
+      background: linear-gradient(135deg, rgba(18, 24, 40, 0.85), rgba(26, 33, 51, 0.95)), url("../images/network_background.jpg") center center/cover no-repeat;
+      background-attachment: fixed; /* Эффект параллакса (опционально) */
+      padding: 6rem 0;
+      border-bottom: 1px solid var(--border-color);
+  }
+  .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+  }
+  .hero-subtitle {
+      font-size: 1.25rem;
+      color: var(--text-muted); /* Используем обновленный --text-muted */
+      margin-bottom: 2.5rem !important;
+  }
+  
+  /* 5. Кнопки */
+  .btn {
+      border-radius: 5px;
+      padding: 0.8rem 1.8rem;
+      font-weight: 600;
+      text-transform: none;
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+  }
+  /* Размеры кнопок */
+  .btn-lg {
+      padding: 0.9rem 2rem;
+      font-size: 1.1rem;
+  }
+  .btn-sm {
+      padding: 0.35rem 0.7rem;
+      font-size: 0.8rem;
+  }
+  
+  .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      color: #fff;
+  }
+  .btn-primary:hover {
+      background-color: var(--primary-hover);
+      border-color: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+  .btn-outline-light {
+      border-color: var(--text-muted);
+      color: var(--text-muted);
+  }
+  .btn-outline-light:hover {
+      border-color: var(--text-light);
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--text-light);
+       transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  /* Стили для других кнопок (secondary, success, warning, danger) для темной темы */
+  .btn-secondary {
+      background-color: #6c757d; /* Стандартный Bootstrap серый */
+      border-color: #6c757d;
+      color: #fff;
+  }
+  .btn-secondary:hover {
+       background-color: #5a6268;
+       border-color: #545b62;
+       transform: translateY(-2px);
+       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  }
+  .btn-success {
+       background-color: #198754;
+       border-color: #198754;
+       color: #fff;
+  }
+  .btn-success:hover {
+        background-color: #157347;
+        border-color: #146c43;
+        transform: translateY(-2px);
+       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  }
+  .btn-warning {
+        background-color: #ffc107;
+        border-color: #ffc107;
+        color: #000; /* Темный текст для желтого фона */
+  }
+  .btn-warning:hover {
+        background-color: #ffca2c;
+        border-color: #ffc720;
+        transform: translateY(-2px);
+       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  }
+  .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: #fff;
+  }
+  .btn-danger:hover {
+        background-color: #bb2d3b;
+        border-color: #b02a37;
+        transform: translateY(-2px);
+       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  }
+  
+  
+  /* Эффект свечения для кнопки */
+  .btn-glow {
+      box-shadow: 0 0 8px var(--glow-color), 0 0 12px var(--glow-color);
+  }
+  .btn-glow:hover {
+       box-shadow: 0 0 12px var(--glow-color), 0 0 20px var(--glow-color), 0 0 25px var(--glow-color);
+  }
+  
+  
+  /* 6. Секция описания и иллюстрации */
+  .section-title {
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+  }
+  
+  .futuristic-illustration {
+      max-width: 80%;
+      opacity: 0.85;
+      filter: drop-shadow(0 0 15px var(--glow-color));
+  }
+  
+  /* 7. Карточки преимуществ / админки */
+  .feature-card {
+      background-color: var(--bg-card);
+      padding: 2.5rem 1.5rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      /* align-items: center; */ /* Убрал центрирование, т.к. в админке текст слева */
+  }
+  .feature-card.text-center { /* Добавим отдельный класс для центрирования, если нужно */
+      align-items: center;
+  }
+  
+  .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 0 15px var(--glow-color);
+  }
+  .feature-icon {
+      color: var(--primary-color);
+      margin-bottom: 1.5rem !important;
+      /* Центрируем иконку, если карточка .text-center */
+      .feature-card.text-center & {
+        align-self: center;
+      }
+  }
+  .feature-icon .fas { /* Убедитесь, что Font Awesome подключен */
+      font-size: 3rem;
+  }
+  
+  .feature-title {
+      color: var(--text-light);
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+  }
+  .feature-text {
+      color: var(--text-muted); /* Используем обновленный --text-muted */
+      font-size: 0.95rem;
+      flex-grow: 1; /* Позволяет тексту занимать место, чтобы кнопки были внизу */
+  }
+  
+  
+  /* 8. Формы */
+  .form-control, .form-select { /* Добавлен .form-select */
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-light);
+      border-radius: 5px;
+  }
+  .form-control:focus, .form-select:focus {
+      background-color: var(--bg-card);
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.2rem rgba(0, 161, 255, 0.25);
+      color: var(--text-light);
+  }
+  /* Стили для disabled полей */
+  .form-control:disabled, .form-control[readonly] {
+      background-color: #2a3145; /* Чуть другой фон для disabled */
+      opacity: 0.7;
+  }
+  /* Цвет плейсхолдера */
+  .form-control::placeholder {
+    color: var(--text-muted);
+    opacity: 0.6;
+  }
+  
+  .form-label {
+      color: var(--text-muted); /* Используем обновленный --text-muted */
+      font-weight: 600; /* Делаем метки чуть жирнее */
+  }
+  .form-select {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23a0a0a0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e"); /* Цвет стрелки для select */
+  }
+  
+  /* Стили для сообщений об ошибках валидации (WTForms/Bootstrap) */
+  .invalid-feedback {
+      color: #dc3545; /* Яркий красный для ошибок */
+      font-weight: 500;
+  }
+  .is-invalid { /* Стиль для невалидного поля */
+      border-color: #dc3545 !important;
+  }
+  .is-invalid:focus { /* Убираем синюю тень при фокусе на невалидном поле */
+       box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+       border-color: #dc3545;
+  }
+  
+  /* --- НОВОЕ: Стили для .bg-light в темной теме --- */
+  .bg-light {
+      background-color: var(--bg-card) !important;
+      color: var(--text-light);
+  }
+  .bg-light h1, .bg-light h2, .bg-light h3, .bg-light h4, .bg-light h5, .bg-light h6,
+  .bg-light p, .bg-light label:not(.btn), .bg-light .form-text, .bg-light li {
+       color: var(--text-light);
+  }
+  /* Для текста с классом .text-muted внутри .bg-light используем наш --text-muted */
+  .bg-light .text-muted, .bg-light .form-label {
+       color: var(--text-muted); /* Используем обновленный --text-muted */
+  }
+  .bg-light .border {
+      border-color: var(--border-color) !important;
+  }
+  .bg-light hr { /* Разделители внутри .bg-light */
+      border-top-color: var(--border-color);
+  }
+  /* --- Конец стилей для .bg-light --- */
+  
+  
+  /* 9. Таблицы */
+  .table {
+     border-color: var(--border-color);
+     color: var(--text-light); /* Цвет текста в таблице */
+  }
+  .table th, .table td {
+      border-color: var(--border-color);
+      padding: 0.9rem; /* Немного увеличим отступы */
+  }
+  /* Стиль для thead */
+  .table > :not(caption) > :first-child > * { /* Переопределяем цвет фона thead (для .table-light) */
+    background-color: rgba(40, 48, 70, 0.7); /* Полупрозрачный темно-синий */
+    color: var(--text-light);
     font-weight: 600;
-    margin-bottom: 20px;
-}
-
-/* Пример стилизации форм */
-form {
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-/* Чтобы footer «прилипал» внизу, 
-   можно добавить min-height у body в комбинации с другими трюками. 
-   Но в упрощенном варианте достаточно следующего: */
-footer {
-    border-top: 1px solid #ccc;
-    margin-top: 20px;
-}
+  }
+  /* Стиль для striped */
+  .table-striped > tbody > tr:nth-of-type(odd) > * {
+    background-color: rgba(255, 255, 255, 0.03); /* Очень легкое выделение нечетных строк */
+    color: var(--text-light);
+  }
+  .table-striped > tbody > tr:nth-of-type(even) > * {
+    background-color: transparent; /* Четные строки без фона */
+     color: var(--text-light);
+  }
+  /* Стиль для hover */
+  .table-hover > tbody > tr:hover > * {
+    background-color: rgba(0, 161, 255, 0.1); /* Подсветка при наведении акцентным цветом */
+    color: var(--text-light);
+  }
+  
+  
+  /* 10. Подвал */
+  footer {
+      background-color: var(--bg-card);
+      color: var(--text-muted); /* Используем обновленный --text-muted */
+      padding: 1.5rem 0;
+      border-top: 1px solid var(--border-color);
+      margin-top: 4rem;
+  }
+  
+  /* 11. Адаптивность */
+  @media (max-width: 992px) { /* Точка для lg */
+      .hero-title {
+           font-size: 3rem;
+      }
+  }
+  
+  @media (max-width: 768px) { /* Точка для md */
+      .hero-title {
+          font-size: 2.5rem;
+      }
+      .hero-subtitle {
+          font-size: 1.1rem;
+      }
+      .btn-lg {
+          padding: 0.7rem 1.5rem;
+          font-size: 1rem;
+      }
+       .futuristic-illustration {
+          margin-top: 2rem;
+          max-width: 70%;
+      }
+      /* Уменьшаем отступы в карточках на мобильных */
+      .feature-card {
+          padding: 1.5rem 1rem;
+      }
+      .feature-icon .fas {
+          font-size: 2.5rem;
+      }
+  }
+  
+  @media (max-width: 576px) { /* Точка для sm */
+       .hero-title {
+           font-size: 2rem;
+       }
+       .hero-subtitle {
+           font-size: 1rem;
+       }
+       /* Уменьшаем отступы в формах */
+       .login-box, .needs-validation {
+           padding: 1.5rem !important;
+       }
+  }
